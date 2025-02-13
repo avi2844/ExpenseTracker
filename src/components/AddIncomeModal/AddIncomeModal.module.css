@@ -1,0 +1,32 @@
+.income-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(2px);
+    z-index: 1000;
+    pointer-events: auto;
+}
+
+.income-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    height: 50%;
+    border-radius: 15px;
+    background: #EFEFEFD9;
+    overflow: auto;
+    outline: none;
+    padding: 20px;
+    z-index: 1100;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

@@ -1,0 +1,60 @@
+.mainWrap {
+    width: 1211;
+    height: 269;
+    top: 94px;
+    left: 32px;
+    border-radius: 10px;
+    background: #626262;
+    display: flex;
+}
+
+.innerWrap{
+    width: 355.4117736816406;
+height: 181;
+top: 140px;
+left: 90px;
+border-radius: 15px;
+background: #9B9B9B;
+margin: 10px;
+display: flex;
+flex-direction: column;
+padding: 20px;
+align-items: center;
+}
+
+.walletButton{
+    width: 167.64706420898438;
+height: 38;
+top: 245px;
+left: 183.88px;
+border-radius: 15px;
+background: linear-gradient(90deg, #B5DC52 0%, #89E148 100%);
+font-family: Ubuntu;
+font-weight: 700;
+font-size: 16px;
+line-height: 18.38px;
+letter-spacing: 0%;
+color: #FFFFFF;
+border: none;
+padding: 10px;
+cursor: pointer;
+}
+
+.expenseButton{
+    width: 167.64706420898438;
+height: 38;
+top: 245px;
+left: 183.88px;
+border-radius: 15px;
+background: linear-gradient(90deg, #FF9595 0%, #FF4747 80%, #FF3838 100%);
+font-family: Ubuntu;
+font-weight: 700;
+font-size: 16px;
+line-height: 18.38px;
+letter-spacing: 0%;
+color: #FFFFFF;
+border: none;
+padding: 10px;
+cursor: pointer;
+}
+
