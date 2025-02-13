@@ -13,8 +13,8 @@
 height: 181;
 top: 140px;
 left: 90px;
-border-radius: 15px;
-background: #9B9B9B;
+border-radius: 15px !important;
+background: #9B9B9B !important;
 margin: 10px;
 display: flex;
 flex-direction: column;
