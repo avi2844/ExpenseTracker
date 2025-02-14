@@ -6,16 +6,22 @@ import AddExpenseModal from "../AddExpenseModal/AddExpenseModal";
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
+import ExpenseItem from "../ExpenseItem/ExpenseItem";
 
 function ExpenseTracker() {
   const [expenseList, setExpenseList] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showExpenseModal, setShowExpenseModal] = useState(false);
 
-  console.log(expenseList);
+  useEffect(()=>{
+    if(expenseList.length > 0){
+      localStorage.setItem('expenseList', JSON.stringify(expenseList));
+    }
+  }, [expenseList]);
 
   useEffect(()=>{
-
+    const list = localStorage.getItem('expenseList');
+    setExpenseList(JSON.parse(list));
   },[])
 
   function handleOpenModal(){
@@ -66,6 +72,15 @@ function ExpenseTracker() {
         </CardActions>
           <AddExpenseModal showModal={showExpenseModal} handleCloseModal={handleCloseExpenseModal} setExpenseList={setExpenseList}/>
         </Card>
+      </div>
+      <h1>Recent Transactions</h1>
+      <div className={styles['recent-transaction']}>
+        {
+          (expenseList.length === 0) ?  <span style={{color: "black"}}>No Transactions!</span> : 
+          expenseList.map((ele, idx) => (
+            <ExpenseItem  data={ele} key={idx}/>
+          ))
+        }
       </div>
     </div>
   );

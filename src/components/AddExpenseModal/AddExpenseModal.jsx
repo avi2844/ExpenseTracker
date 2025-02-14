@@ -16,7 +16,7 @@ function AddExpenseModal({ showModal, handleCloseModal, setExpenseList }) {
             title : titleRef.current.value,
             price : priceRef.current.value,
             category : categoryRef.current.value,
-            date : dateRef.current.value
+            date : dateRef.current.value.toString()
         }]);
         titleRef.current.value = "";
         priceRef.current.value = "";
