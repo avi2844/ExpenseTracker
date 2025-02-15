@@ -3,7 +3,7 @@ import styles from "./ExpenseItem.module.css";
 import deleteIcon from "../../assets/deleteIcon.png";
 import editIcon from "../../assets/editIcon.png";
 
-function ExpenseItem({ data }) {
+function ExpenseItem({ data, handleDelete, handleEdit}) {
   const formattedDate = new Date(data.date).toLocaleDateString("en-GB", {
     day: "numeric",
     month: "long",
@@ -25,8 +25,8 @@ function ExpenseItem({ data }) {
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <h3 style={{ color: "#F4BB4A" }}>₹ {data.price}</h3>
         <div>
-          <img src={deleteIcon} alt="delete" />
-          <img src={editIcon} alt="edit" />
+          <img src={deleteIcon} alt="delete" style={{cursor:'pointer'}} onClick={handleDelete}/>
+          <img src={editIcon} alt="edit" style={{cursor:'pointer'}} onClick={handleEdit}/>
         </div>
       </div>
     </div>

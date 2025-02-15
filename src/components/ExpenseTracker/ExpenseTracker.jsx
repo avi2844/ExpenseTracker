@@ -7,22 +7,40 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import ExpenseItem from "../ExpenseItem/ExpenseItem";
+import TransactionList from "../TransactionList/TransactionList";
 
 function ExpenseTracker() {
   const [expenseList, setExpenseList] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showExpenseModal, setShowExpenseModal] = useState(false);
+  const [totalExpense, setTotalExpense] = useState(0);
+  const [walletbal, setWalletbal] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(()=>{
-    if(expenseList.length > 0){
+    if(isMounted){
       localStorage.setItem('expenseList', JSON.stringify(expenseList));
+      const total = expenseList.reduce((acc, ele) => acc + Number(ele.price),0);
+      setTotalExpense(total);
     }
   }, [expenseList]);
 
   useEffect(()=>{
-    const list = localStorage.getItem('expenseList');
-    setExpenseList(JSON.parse(list));
-  },[])
+          const list = localStorage.getItem('expenseList');
+          if(!list) localStorage.setItem('expenseList', []);
+          else setExpenseList(JSON.parse(list));
+
+          const localwalletbal = localStorage.getItem('walletBalance');
+          console.log(localwalletbal);
+          setWalletbal((localwalletbal) ? localwalletbal : 5000);
+          setIsMounted(true);
+        },[])
+
+  useEffect(() => {
+    if(isMounted){
+      localStorage.setItem('walletBalance', walletbal);
+    }
+  }, [walletbal]);
 
   function handleOpenModal(){
     setShowModal(true);
@@ -41,8 +59,9 @@ function ExpenseTracker() {
   }
 
   function addBalance(amt){
-    const walletbal = localStorage.getItem('walletBalance') || 5000;
-    localStorage.setItem('walletBalance', walletbal + amt);
+    const localwalletbal = localStorage.getItem('walletBalance');
+    localStorage.setItem('walletBalance', Number(localwalletbal) + amt);
+    setWalletbal(Number(localwalletbal) + amt);
     setShowModal(false);
   }
 
@@ -53,7 +72,7 @@ function ExpenseTracker() {
         <Card className={styles.innerWrap}>
         <CardContent>
         <div>
-          Wallet Balance: <span style={{color:"#9DFF5B"}}>₹{localStorage.getItem('walletBalance') || 5000}</span>
+          Wallet Balance: <span style={{color:"#9DFF5B"}}>₹{walletbal}</span>
         </div>
         </CardContent>
         <CardActions>
@@ -64,24 +83,17 @@ function ExpenseTracker() {
         <Card className={styles.innerWrap}>
         <CardContent> 
           <div>
-          Expenses: <span style={{color: '#F4BB4A'}}>₹{localStorage.getItem('walletBalance') || 5000}</span>
+          Expenses: <span style={{color: '#F4BB4A'}}>₹{totalExpense}</span>
           </div>
         </CardContent>
         <CardActions>
         <button type="button" className={styles.expenseButton} onClick={handleOpenExpenseModal}>+ Add Expense</button>
         </CardActions>
-          <AddExpenseModal showModal={showExpenseModal} handleCloseModal={handleCloseExpenseModal} setExpenseList={setExpenseList}/>
+          <AddExpenseModal showModal={showExpenseModal} handleCloseModal={handleCloseExpenseModal} setExpenseList={setExpenseList} updateBalance={setWalletbal}/>
         </Card>
       </div>
       <h1>Recent Transactions</h1>
-      <div className={styles['recent-transaction']}>
-        {
-          (expenseList.length === 0) ?  <span style={{color: "black"}}>No Transactions!</span> : 
-          expenseList.map((ele, idx) => (
-            <ExpenseItem  data={ele} key={idx}/>
-          ))
-        }
-      </div>
+      <TransactionList expenses={expenseList} updateExpenseList={setExpenseList} updateBalance={setWalletbal}/>
     </div>
   );
 }
