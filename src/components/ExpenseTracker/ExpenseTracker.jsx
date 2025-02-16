@@ -8,6 +8,8 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import ExpenseItem from "../ExpenseItem/ExpenseItem";
 import TransactionList from "../TransactionList/TransactionList";
+import PieChartComponent from "../PieChartComponent/PieChartComponent";
+import BarChartComponent from "../BarChartComponent/BarChartComponent";
 
 function ExpenseTracker() {
   const [expenseList, setExpenseList] = useState([]);
@@ -17,11 +19,26 @@ function ExpenseTracker() {
   const [walletbal, setWalletbal] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
 
+  const [categorySpends, setCategorySpends] = useState([
+    { name: 'Entertainment', value: 0 },
+    { name: 'Food', value: 0 },
+    { name: 'Travel', value: 0 },
+  ]);
+
+
   useEffect(()=>{
     if(isMounted){
       localStorage.setItem('expenseList', JSON.stringify(expenseList));
       const total = expenseList.reduce((acc, ele) => acc + Number(ele.price),0);
       setTotalExpense(total);
+
+      const categories = Object.groupBy(expenseList, ({ category }) => category);
+
+      setCategorySpends([ 
+        { name: 'Entertainment', value: ((categories.entertainment) ? categories.entertainment.reduce((acc, ele) => acc + Number(ele.price),0) : 0) },
+        { name: 'Food', value: ((categories.food) ? categories.food.reduce((acc, ele) => acc + Number(ele.price),0) : 0) },
+        { name: 'Travel', value: ((categories.Travel) ? categories.Travel.reduce((acc, ele) => acc + Number(ele.price),0) : 0) }
+      ]);
     }
   }, [expenseList]);
 
@@ -31,7 +48,6 @@ function ExpenseTracker() {
           else setExpenseList(JSON.parse(list));
 
           const localwalletbal = localStorage.getItem('walletBalance');
-          console.log(localwalletbal);
           setWalletbal((localwalletbal) ? localwalletbal : 5000);
           setIsMounted(true);
         },[])
@@ -66,14 +82,14 @@ function ExpenseTracker() {
   }
 
   return (
-    <div style={{ color: "white", padding: "10px"}}>
+    <div style={{ padding: "10px"}}>
       <h1>Expense Tracker</h1>
       <div className={styles.mainWrap}>
         <Card className={styles.innerWrap}>
         <CardContent>
-        <div>
+        <h1>
           Wallet Balance: <span style={{color:"#9DFF5B"}}>₹{walletbal}</span>
-        </div>
+        </h1>
         </CardContent>
         <CardActions>
         <button className={styles.walletButton} type="button" onClick={handleOpenModal}>+ Add Income</button>
@@ -82,18 +98,31 @@ function ExpenseTracker() {
         </Card>
         <Card className={styles.innerWrap}>
         <CardContent> 
-          <div>
+          <h1>
           Expenses: <span style={{color: '#F4BB4A'}}>₹{totalExpense}</span>
-          </div>
+          </h1>
         </CardContent>
         <CardActions>
         <button type="button" className={styles.expenseButton} onClick={handleOpenExpenseModal}>+ Add Expense</button>
         </CardActions>
           <AddExpenseModal showModal={showExpenseModal} handleCloseModal={handleCloseExpenseModal} setExpenseList={setExpenseList} updateBalance={setWalletbal}/>
         </Card>
+        <div style={{ width: "100%", height: "100%" }}>
+        <PieChartComponent data={categorySpends}/>
+        </div>
       </div>
-      <h1>Recent Transactions</h1>
-      <TransactionList expenses={expenseList} updateExpenseList={setExpenseList} updateBalance={setWalletbal}/>
+      <div style={{display: 'flex', height: '100%', gap: '20px'}}>
+        <div style={{width: '50%'}}> 
+        <h1>Recent Transactions</h1>
+        <TransactionList expenses={expenseList} updateExpenseList={setExpenseList} updateBalance={setWalletbal}/>
+        </div>
+        <div style={{width: '50%', height : '100%'}}>
+        <h1>Top Expenses</h1>
+        <div style={{background: 'white', borderRadius: '15px'}}>
+        <BarChartComponent data={categorySpends.sort((a,b) => b.value - a.value)}/>
+        </div>
+        </div>
+      </div>
     </div>
   );
 }

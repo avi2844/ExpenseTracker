@@ -1,4 +1,6 @@
 import { MdOutlineFastfood } from "react-icons/md";
+import { BsLuggage } from "react-icons/bs";
+import { RiMovie2AiLine } from "react-icons/ri";
 import styles from "./ExpenseItem.module.css";
 import deleteIcon from "../../assets/deleteIcon.png";
 import editIcon from "../../assets/editIcon.png";
@@ -14,11 +16,13 @@ function ExpenseItem({ data, handleDelete, handleEdit}) {
     <div className={styles.item}>
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <div className={styles.icon}>
-          <MdOutlineFastfood />
+          {(data.category.toLowerCase() === "food") && <MdOutlineFastfood />}
+          {(data.category.toLowerCase() === "travel") && <BsLuggage />}
+          {(data.category.toLowerCase() === "entertainment") && <RiMovie2AiLine />}
         </div>
         <div>
           <span style={{ color: "#000000" }}>{data.title}</span>
-          <br />g
+          <br />
           <span style={{ color: "#9B9B9B" }}>{formattedDate}</span>
         </div>
       </div>
